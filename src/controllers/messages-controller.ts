@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Message } from '../models/message.ts';
 import { MessageRepository } from '../repositories/message-repository.ts';
+import { TurboStream } from '../turbo-stream.ts';
 
 const messageRepository = new MessageRepository();
 export const controller = Router();
@@ -17,6 +18,9 @@ controller.post('/', async (req, res) => {
 
 	const message = new Message({ text });
 	await messageRepository.save(message);
+	TurboStream.getInstance().append(res, 'messages', 'messages/item', {
+		message,
+	});
 
 	return res.redirect('/messages');
 });

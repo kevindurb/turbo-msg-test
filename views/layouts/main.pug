@@ -1,5 +1,10 @@
 html
   head
     title Turbo Msg Test
+    script(
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@latest/dist/turbo.es2017-esm.min.js"
+    )
   body
-  block content
+    turbo-stream-source(src="ws://localhost:3000")
+    block content

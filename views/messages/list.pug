@@ -1,11 +1,13 @@
 extends ../layouts/main.pug
 
 block content
-  h1 Messages!!
-  form(method="post" action="/messages")
-    input(type="text" name="message")
-    input(type="submit" value="Send")
+  turbo-frame(id="message-form")
+    h1 Messages!!
+    form(method="post" action="/messages")
+      input(type="text" name="message")
+      input(type="submit" value="Send")
 
-  ul
-    each message in messages
-      li= message.text
+      ul
+        turbo-frame(id="messages")
+          each message in messages
+            include ./item.pug
