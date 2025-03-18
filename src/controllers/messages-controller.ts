@@ -1,20 +1,22 @@
 import { Router } from 'express';
+import { Message } from '../models/message.ts';
+import { MessageRepository } from '../repositories/message-repository.ts';
 
-const messages: string[] = [];
-
+const messageRepository = new MessageRepository();
 export const controller = Router();
 
-controller.get('/', (_, res) => {
-	res.render('messages/list', { messages });
+controller.get('/', async (_, res) => {
+	res.render('messages/list', { messages: await messageRepository.list() });
 });
 
-controller.post('/', (req, res) => {
-	const message = req.body.message;
-	if (typeof message !== 'string' || !message.length) {
-		return res.render('messages/list', { messages });
+controller.post('/', async (req, res) => {
+	const text = req.body.message;
+	if (typeof text !== 'string' || !text.length) {
+		return res.redirect('/messages');
 	}
 
-	messages.push(message);
+	const message = new Message({ text });
+	await messageRepository.save(message);
 
-	res.render('messages/list', { messages });
+	return res.redirect('/messages');
 });
