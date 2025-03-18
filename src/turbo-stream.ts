@@ -27,11 +27,16 @@ export class TurboStream {
 		ws.on('close', () => this.connections.delete(ws));
 	}
 
-	private sendAll(message: string) {
-		this.connections.forEach((ws) => ws.send(message));
+	private static sendAll(message: string) {
+		this.getInstance().connections.forEach((ws) => ws.send(message));
 	}
 
-	public append(res: Response, target: string, view: string, locals?: object) {
+	public static append(
+		res: Response,
+		target: string,
+		view: string,
+		locals?: object,
+	) {
 		res.render(view, locals, (err, html) => {
 			if (err) throw err;
 			res.render(
